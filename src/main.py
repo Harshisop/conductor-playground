@@ -46,21 +46,23 @@ def scrape_for_user(user: UserConfig, delay: int) -> list[JobListing]:
 
 
 def filter_by_title(jobs: list[JobListing], keywords: list[str]) -> list[JobListing]:
-    keyword_tokens = []
+    # Clean keywords: strip punctuation, normalize
+    import re
+    clean_keywords = []
     for kw in keywords:
-        keyword_tokens.append(kw.lower().strip())
-        # Also add individual words for multi-word keywords (e.g. "legal assistant" -> ["legal", "assistant"])
-        for word in kw.lower().split():
-            word = word.strip()
-            if len(word) > 2:  # Skip tiny words like "of", "in"
-                keyword_tokens.append(word)
-
-    keyword_tokens = list(set(keyword_tokens))
+        # Remove special chars like &, -, etc. and normalize spaces
+        cleaned = re.sub(r'[&\-/,]+', ' ', kw.lower()).strip()
+        cleaned = re.sub(r'\s+', ' ', cleaned)
+        if cleaned:
+            clean_keywords.append(cleaned)
 
     matched = []
     for job in jobs:
-        title_lower = job.title.lower()
-        if any(token in title_lower for token in keyword_tokens):
+        title_lower = re.sub(r'[&\-/,]+', ' ', job.title.lower())
+        title_lower = re.sub(r'\s+', ' ', title_lower)
+
+        # Job title must contain the full keyword phrase (not individual words)
+        if any(kw in title_lower for kw in clean_keywords):
             matched.append(job)
     return matched
 
