@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Scraper — Register</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Job Scraper</h1>
+        <p class="subtitle">Register to receive job listings in your Google Sheet tab every 3 days.</p>
+
+        <form id="registration-form">
+            <div class="field">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="e.g. Harsh Mamgain" required>
+                <span class="hint">This will be your tab name in the Google Sheet</span>
+            </div>
+
+            <div class="field">
+                <label for="keywords">Job Keywords</label>
+                <input type="text" id="keywords" name="keywords" placeholder="e.g. GTME, go to market engineer" required>
+                <span class="hint">Comma-separated job titles or keywords</span>
+            </div>
+
+            <div class="field">
+                <label>Locations</label>
+                <div class="checkbox-group">
+                    <label class="checkbox"><input type="checkbox" name="location" value="Remote"> Remote</label>
+                    <label class="checkbox"><input type="checkbox" name="location" value="USA"> USA</label>
+                    <label class="checkbox"><input type="checkbox" name="location" value="Canada"> Canada</label>
+                    <label class="checkbox"><input type="checkbox" name="location" value="Europe"> EU</label>
+                </div>
+                <input type="text" id="custom-location" placeholder="Or type custom locations (comma-separated)">
+            </div>
+
+            <div class="field">
+                <label>Job Sources</label>
+                <div class="checkbox-group">
+                    <label class="checkbox"><input type="checkbox" name="source" value="LinkedIn" checked> LinkedIn</label>
+                    <label class="checkbox"><input type="checkbox" name="source" value="Indeed" checked> Indeed</label>
+                    <label class="checkbox"><input type="checkbox" name="source" value="Google Jobs" checked> Google Jobs</label>
+                    <label class="checkbox"><input type="checkbox" name="source" value="Naukri"> Naukri</label>
+                </div>
+            </div>
+
+            <div class="field">
+                <label>Job Type</label>
+                <div class="checkbox-group">
+                    <label class="checkbox"><input type="checkbox" name="job_type" value="Full-time" checked> Full-time</label>
+                    <label class="checkbox"><input type="checkbox" name="job_type" value="Contract"> Contract</label>
+                    <label class="checkbox"><input type="checkbox" name="job_type" value="Part-time"> Part-time</label>
+                    <label class="checkbox"><input type="checkbox" name="job_type" value="Internship"> Internship</label>
+                </div>
+            </div>
+
+            <button type="submit" id="submit-btn">Register</button>
+        </form>
+
+        <div id="status" class="status hidden"></div>
+
+        <p class="footer">Max 5 users. If you register with the same name, your preferences will be updated.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
