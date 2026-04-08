@@ -97,10 +97,15 @@ def push_jobs_for_user(
     except gspread.WorksheetNotFound:
         worksheet = spreadsheet.add_worksheet(user_name, rows=1000, cols=20)
 
-    # Write headers if sheet is empty
+    # Write headers if missing
     existing_data = worksheet.get_all_values()
-    if not existing_data:
-        worksheet.append_row(JobListing.sheet_headers(), value_input_option="USER_ENTERED")
+    headers = JobListing.sheet_headers()
+    if not existing_data or existing_data[0] != headers:
+        if existing_data:
+            # Data exists but no header — insert header as row 1
+            worksheet.insert_row(headers, index=1, value_input_option="USER_ENTERED")
+        else:
+            worksheet.append_row(headers, value_input_option="USER_ENTERED")
 
     existing_urls = get_existing_urls(worksheet)
 

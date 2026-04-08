@@ -37,8 +37,32 @@ def scrape_for_user(user: UserConfig, delay: int) -> list[JobListing]:
         jobs = himalayas_api.scrape(api.himalayas.keywords)
         all_jobs.extend(jobs)
 
-    logger.info(f"[{user.name}] Total jobs before dedup: {len(all_jobs)}")
-    return all_jobs
+    logger.info(f"[{user.name}] Total jobs before filtering: {len(all_jobs)}")
+
+    # Filter: only keep jobs whose title contains at least one keyword
+    filtered = filter_by_title(all_jobs, user.keywords)
+    logger.info(f"[{user.name}] Jobs after title filter: {len(filtered)}")
+    return filtered
+
+
+def filter_by_title(jobs: list[JobListing], keywords: list[str]) -> list[JobListing]:
+    keyword_tokens = []
+    for kw in keywords:
+        keyword_tokens.append(kw.lower().strip())
+        # Also add individual words for multi-word keywords (e.g. "legal assistant" -> ["legal", "assistant"])
+        for word in kw.lower().split():
+            word = word.strip()
+            if len(word) > 2:  # Skip tiny words like "of", "in"
+                keyword_tokens.append(word)
+
+    keyword_tokens = list(set(keyword_tokens))
+
+    matched = []
+    for job in jobs:
+        title_lower = job.title.lower()
+        if any(token in title_lower for token in keyword_tokens):
+            matched.append(job)
+    return matched
 
 
 def run_multi_user(config):
