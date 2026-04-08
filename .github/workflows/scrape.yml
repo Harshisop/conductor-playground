@@ -1,0 +1,36 @@
+name: Job Scraper
+
+on:
+  schedule:
+    # Runs every 3 days at 06:00 UTC
+    - cron: '0 6 1,4,7,10,13,16,19,22,25,28 * *'
+  workflow_dispatch: # Manual trigger for testing
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        env:
+          GOOGLE_SHEETS_CREDS_JSON: ${{ secrets.GOOGLE_SHEETS_CREDS_JSON }}
+        run: python -m src.main
+
+      - name: Upload backup CSV if scraper failed
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backup-jobs
+          path: backup_jobs_*.csv
+          if-no-files-found: ignore

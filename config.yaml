@@ -1,0 +1,78 @@
+# Job Scraper Configuration — Harsh Mamgain
+# Customize your job searches below
+
+searches:
+  # GTME - Remote
+  - keywords: "go to market engineer"
+    location: "Remote"
+    sites: ["linkedin", "indeed", "google"]
+    job_type: "fulltime"
+    remote_only: true
+    hours_old: 72
+    results_wanted: 50
+
+  - keywords: "GTME"
+    location: "Remote"
+    sites: ["linkedin", "indeed", "google"]
+    job_type: "fulltime"
+    remote_only: true
+    hours_old: 72
+    results_wanted: 50
+
+  # GTME - USA
+  - keywords: "go to market engineer"
+    location: "United States"
+    sites: ["linkedin", "indeed", "google"]
+    job_type: "fulltime"
+    remote_only: false
+    hours_old: 72
+    results_wanted: 50
+
+  # GTME - Canada
+  - keywords: "go to market engineer"
+    location: "Canada"
+    sites: ["linkedin", "indeed", "google"]
+    job_type: "fulltime"
+    remote_only: false
+    hours_old: 72
+    results_wanted: 50
+
+  # GTME - EU
+  - keywords: "go to market engineer"
+    location: "Europe"
+    sites: ["linkedin", "google"]
+    job_type: "fulltime"
+    remote_only: false
+    hours_old: 72
+    results_wanted: 50
+
+  # Contract roles
+  - keywords: "go to market engineer"
+    location: "Remote"
+    sites: ["linkedin", "indeed", "google"]
+    job_type: "contract"
+    remote_only: true
+    hours_old: 72
+    results_wanted: 50
+
+# Free API sources (supplement main scraper with remote job boards)
+api_sources:
+  remotive:
+    enabled: true
+    categories: ["marketing", "sales"]
+  himalayas:
+    enabled: true
+    keywords: ["go to market engineer", "GTME"]
+
+# Google Sheets output
+google_sheets:
+  spreadsheet_name: "Job Scraper Results"
+  worksheet_name: "Jobs"
+  credentials_env_var: "GOOGLE_SHEETS_CREDS_JSON"
+
+# Scraper settings
+settings:
+  delay_between_searches: 3
+  max_retries: 2
+  deduplicate: true
+  log_level: "INFO"
