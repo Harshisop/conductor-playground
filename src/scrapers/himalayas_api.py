@@ -26,19 +26,28 @@ def scrape(keywords: list[str]) -> list[JobListing]:
             jobs_list = data.get("jobs", [])
             for item in jobs_list:
                 try:
+                    def _to_float(val):
+                        if val is None:
+                            return None
+                        try:
+                            return float(val)
+                        except (ValueError, TypeError):
+                            return None
+
+                    job_url = item.get("applicationLink") or item.get("url") or item.get("externalUrl") or ""
                     job = JobListing(
                         title=item.get("title", "Unknown"),
-                        company=item.get("companyName", "Unknown"),
+                        company=item.get("companyName", item.get("company_name", "Unknown")),
                         location=item.get("location", "Remote"),
-                        job_url=item.get("applicationLink") or item.get("url", ""),
+                        job_url=job_url,
                         source="himalayas",
                         date_posted=None,
                         date_scraped=date.today(),
                         job_type=item.get("type"),
                         is_remote=True,
-                        salary_min=item.get("minSalary"),
-                        salary_max=item.get("maxSalary"),
-                        salary_currency=item.get("salaryCurrency"),
+                        salary_min=_to_float(item.get("minSalary")),
+                        salary_max=_to_float(item.get("maxSalary")),
+                        salary_currency=str(item.get("salaryCurrency", "")) or None,
                         description_snippet=(item.get("description", "") or "")[:300] or None,
                         skills=", ".join(item.get("categories", [])) if item.get("categories") else None,
                         experience_level=item.get("seniority"),

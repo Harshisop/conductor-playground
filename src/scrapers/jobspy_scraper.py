@@ -1,11 +1,26 @@
 import logging
 import time
-from datetime import date
+from datetime import date, datetime
+
+import pandas as pd
 
 from src.config_loader import SearchConfig
 from src.models import JobListing
 
 logger = logging.getLogger(__name__)
+
+
+def _parse_date(val) -> date | None:
+    if val is None or (isinstance(val, float) and pd.isna(val)):
+        return None
+    if isinstance(val, date):
+        return val
+    if isinstance(val, datetime):
+        return val.date()
+    try:
+        return datetime.fromisoformat(str(val)).date()
+    except (ValueError, TypeError):
+        return None
 
 
 def scrape(search: SearchConfig, delay: int = 3) -> list[JobListing]:
@@ -59,7 +74,7 @@ def scrape(search: SearchConfig, delay: int = 3) -> list[JobListing]:
                         location=location or search.location,
                         job_url=job_url,
                         source=site,
-                        date_posted=row.get("date_posted") if row.get("date_posted") is not None else None,
+                        date_posted=_parse_date(row.get("date_posted")),
                         date_scraped=date.today(),
                         job_type=str(row.get("job_type", "")) or None,
                         is_remote=row.get("is_remote"),
