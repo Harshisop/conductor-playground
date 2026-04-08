@@ -1,5 +1,5 @@
 // Replace this with your deployed Google Apps Script URL
-const APPS_SCRIPT_URL = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyeKwjrPHwjJW1ArXSNPcPFlQHVqHxVVdlv2Jp0UhAVQGpds7tP0vsifX551p53QSi-/exec";
 
 const form = document.getElementById("registration-form");
 const statusDiv = document.getElementById("status");
