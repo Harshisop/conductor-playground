@@ -41,7 +41,7 @@ def user_to_searches(user: UserConfig) -> list[SearchConfig]:
                     sites=sites,
                     job_type=job_type,
                     remote_only=is_remote,
-                    hours_old=72,
+                    hours_old=168,
                     results_wanted=50,
                 ))
 
